@@ -7,7 +7,8 @@ const helmet = require('helmet');
 
 const app = express();
 
-app.use(morgan('common'));
+const morganSetting = process.env.NODE_ENV === 'production' ? 'tiny' : 'common';
+app.use(morgan(morganSetting));
 app.use(helmet());
 app.use(cors());
 app.use(validateBearer);
@@ -29,6 +30,16 @@ function validateBearer(req, res, next) {
   }
   next();
 }
+
+app.use((error, req, res, next) => {
+  let response;
+  if (process.env.NODE_ENV === 'production') {
+    response = { error: { message: 'server error' }};
+  } else {
+    response = { error };
+  }
+  res.status(500).json(response);
+});
 
 
 //Sends back data when browser looks at /movie endpoint
@@ -57,8 +68,8 @@ app.get('/movie', (req, res) => {
   res.json(filtered);
 });
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-  console.log(`listening on ${PORT}`);
+  
 });

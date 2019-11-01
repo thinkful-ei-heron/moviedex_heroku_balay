@@ -13,6 +13,9 @@
     "url": "git+https://github.com/thinkful-ei-heron/moviedex_alex_balay.git"
   },
   "keywords": [],
+  "engines": {
+    "node": "12.10.0"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
